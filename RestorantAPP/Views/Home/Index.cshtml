@@ -1,0 +1,320 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<SelectListItem>, IEnumerable<SelectListItem>>
+@{
+    ViewBag.Title = "Home Page";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js">
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Artikl").val(0);
+        $("#Artikl").change(function () {
+
+            var ArtiklId = $("#Artikl").val();
+            zemiCena(ArtiklId);
+        });
+
+        $("input[type=text]").change(function () {
+            presmetajCena();
+        });
+
+        $("input[type=text]").keyup(function () {
+            presmetajBilans();
+        });
+
+        $("#btnDodadi").click(function () {
+            poracaniArtikli();
+        });
+        $("#btnPlati").click(function () {
+            krajnaIsplata();
+        });
+
+    });
+    function krajnaIsplata() {
+        var objNarackaView = {};
+        var lista = new Array();
+        //DetaliNarackaView
+        //lista
+        objNarackaView.TipNaNarackaId = $("#TipNaNaplata").val();
+        objNarackaView.KlientId = $("#Klient").val();
+        objNarackaView.Vkupno = $("#txtVkupno").val();
+
+        $("#tabelaPoracani").find("tr:gt(0)").each(function () {
+            var DetaliNarackaView = {};
+            DetaliNarackaView.Vkupno = parseFloat($(this).find("td:eq(4)").text());
+            DetaliNarackaView.ArtiklId = parseFloat($(this).find("td:eq(0)").text());
+            DetaliNarackaView.Cena = parseFloat($(this).find("td:eq(2)").text());
+            DetaliNarackaView.Kolicina = parseFloat($(this).find("td:eq(3)").text());
+            lista.push(DetaliNarackaView);
+        });
+
+        objNarackaView.lista = lista;
+        $.ajax({
+            async: true,
+            type: 'POST',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(objNarackaView),
+            url: '/Home/Index',
+            success: function (data) {
+                alert(data);
+            },
+            error: function (data) {
+                alert("Nastana problem so dodavanje na informaciite")
+            }
+
+        });
+
+    }
+    function poracaniArtikli() {
+        var dodajPoracka = $("#tabelaPoracani");
+        var cena = $("#txtCena").val();
+        var kolicina = $("#txtKolicina").val();
+        var ArtiklId = $("#Artikl").val();
+        var imeArtikl = $("#Artikl option:selected").text();
+        var vkupno = cena * kolicina;
+        var napravenaPoracka = "<tr><td hidden>" + ArtiklId + "</td><td>" + imeArtikl + "</td><td>" + parseFloat(cena).toFixed(2) + "</td><td>" + parseFloat(kolicina).toFixed(2) + "</td><td>" + parseFloat(vkupno).toFixed(2) + "</td><td><input type='button' value='Izbrisi' class='btn btn-danger' name='izbrisi' onclick='izbrisi(this)'/></td></tr>";
+
+        dodajPoracka.append(napravenaPoracka);
+        vkupnoNaplakanje();
+        novo();
+    }
+    function izbrisi(ArtiklId) {
+        $(ArtiklId).closest('tr').remove();
+    }
+
+
+    function novo() {
+        $("#txtCena").val('');
+        $("#txtKolicina").val('');
+        $("#Artikl").val(0);
+        $("#txtVkupno").val('');
+    }
+
+    function presmetajCena() {
+        var cena = $("#txtCena").val();
+        var kolicina = $("#txtKolicina").val();
+
+        var vkupno = cena * kolicina;
+        $("#txtVkupno").val(parseFloat(vkupno).toFixed(2));
+
+    }
+    function vkupnoNaplakanje() {
+        $("#sumaOdSite").val("0.00");
+        var sumaSite = 0.00;
+        $("#tabelaPoracani").find("tr:gt(0)").each(function () {
+            var vkupno = parseFloat($(this).find("td:eq(4)").text());
+            sumaSite += vkupno;
+        });
+        $("#sumaOdSite").val(parseFloat(sumaSite).toFixed(2));
+        $("#txtPotroseno").val(parseFloat(sumaSite).toFixed(2));
+        $("#txtBilans").val(parseFloat(sumaSite).toFixed(2));
+        
+    }
+    function presmetajBilans() {
+        var sumaOdSite = $("#txtPotroseno").val();
+        var platiKlient = $("#txtPlati").val();
+        var vrati = $("#txtVrati").val();
+        var bilans = parseFloat(sumaOdSite) - parseFloat(platiKlient) + parseFloat(vrati);
+        $("#txtBilans").val(parseFloat(bilans).toFixed(2));
+        if (parseFloat(bilans) == 0) {
+            $("#btnPlati").removeAttr("disabled");
+        }
+        else {
+            $("#btnPlati").attr("disabled", "disabled");
+        }
+    }
+    function zemiCena(ArtiklId) {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            data: { ArtiklId: ArtiklId },
+            url: '/home/zemiCena',
+            success: function (data) {
+                $("#txtCena").val(parseFloat(data).toFixed(2));
+            },
+            error: function () {
+                alert("Nastana problem");
+            }
+        });
+    }
+</script>
+<style>
+    #Klienti {
+    border:1px solid black !important;
+    margin:0;
+    padding:8px;
+    position:relative;
+    padding-left:8px !important;
+    color:white;
+    background-color:red;
+    }
+    #Artikli {
+        border: 1px solid black !important;
+        margin: 0;
+        padding: 8px;
+        position: relative;
+        padding-left: 8px !important;
+        background-color: grey;
+    }
+    #Poracki {
+        border: 1px solid black !important;
+        margin: 0;
+        padding: 8px;
+        position: relative;
+        padding-left: 8px !important;
+        color: black;
+        background-color: yellow;
+    }
+    legend {
+        margin-top:20px;
+        font-family: Arial;
+        font-size: 16px;
+        margin-bottom: 0px;
+        width: 35%;
+        border: 1px solid;
+        padding: 3px 3px 3px 8px;
+        background-color: white;
+    }
+    #zacuvajSe {
+        float:right;
+        margin-top:5%;
+    }
+    
+</style>
+
+<fieldset id="Klienti">
+    <legend>
+        Restorant
+    </legend>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    Klient :
+                    @Html.DropDownList("Klient", new SelectList(Model.Item1, "Value", "Text"), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Tip na Naplata :
+                    @Html.DropDownList("TipNaNaplata", new SelectList(Model.Item3, "Value", "Text"), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Vkupno :
+                   <input id="sumaOdSite" value="0" type="text" readonly="readonly" name="krajnaSuma" class="form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset id="Artikli">
+    <legend>
+        Restorant Artikli
+    </legend>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    Artikl :
+                    @Html.DropDownList("Artikl", new SelectList(Model.Item2, "Value", "Text"), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Cena :
+                    <input type="text" readonly="readonly" id="txtCena" value="0.00" name="Cena" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Kolicina :
+                    <input type="text" id="txtKolicina" value="0" name="Kolicina" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">          
+            
+            <div class="col-md-8">
+                <div class="form-group">
+                    Vkupno :
+                    <input type="text" readonly="readonly" id="txtVkupno" value="0.00" name="Total" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <button id="btnDodadi" class="btn btn-success" value="Dodaj">Dodadi</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</fieldset>
+<fieldset id="Poracki">
+    <legend>
+        Restorant Selektirani Artikli
+    </legend>
+    <table id="tabelaPoracani" style="width:100%;">
+        <thead>
+            <tr>
+                <th hidden>Artikl ID</th>
+                <th>Imeto na artiklot</th>
+                <th>Cena</th>
+                <th>Kolicina</th>
+                <th>Vkupno</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+</fieldset>
+<div id="zacuvajSe">
+    <button data-toggle="modal" data-backdrop="static" data-keydrop="false" data-target="#Naplata" id="zacuvaj" class="btn btn-primary">Zacuvaj</button>
+</div>
+
+<div id="Naplata" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Plati</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group col">
+                            Vkupno za plakanje imate:
+                            <input type="text" id="txtPotroseno" readonly="readonly" value="0.00" class="form-control" />
+                        </div>
+                        <div class="form-group col">
+                            Plati:
+                            <input type="text" id="txtPlati" value="0.00" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            Vrati:
+                            <input type="text" id="txtVrati" value="0.00" class="form-control" />
+                        </div>
+                        <div class="form-group col">
+                            Iznosot na bilansot:
+                            <input type="text" readonly="readonly" id="txtBilans" value="0.00" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnPlati" class="btn btn-success" disabled>Plati</button>
+                <button id="btnZatvori" class="btn btn-danger" data-dismiss="modal">Zatvori</button>
+            </div>
+        </div>
+    </div>
+</div>

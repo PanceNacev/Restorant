@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RestorantDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artikl">
+          <Key>
+            <PropertyRef Name="ArtiklId" />
+          </Key>
+          <Property Name="ArtiklId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArtiklIme" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ArtiklCena" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Klienti">
+          <Key>
+            <PropertyRef Name="KlientId" />
+          </Key>
+          <Property Name="KlientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KlientIme" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipNaNaplata">
+          <Key>
+            <PropertyRef Name="TipNaNaplataId" />
+          </Key>
+          <Property Name="TipNaNaplataId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipNaNaplataIme" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetaliNaracka">
+          <Key>
+            <PropertyRef Name="DetaliNarackaId" />
+          </Key>
+          <Property Name="DetaliNarackaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NarackaId" Type="int" Nullable="false" />
+          <Property Name="ArtiklId" Type="int" Nullable="false" />
+          <Property Name="Cena" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Kolicina" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Vkupno" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Naracka">
+          <Key>
+            <PropertyRef Name="NarackaId" />
+          </Key>
+          <Property Name="NarackaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KlientId" Type="int" Nullable="false" />
+          <Property Name="TipNaNaplataId" Type="int" Nullable="false" />
+          <Property Name="BrojNaracka" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DatumNaracka" Type="datetime" Nullable="false" />
+          <Property Name="VkupnoPotroseno" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transakcija">
+          <Key>
+            <PropertyRef Name="TransakcijaId" />
+          </Key>
+          <Property Name="TransakcijaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArtiklId" Type="int" Nullable="false" />
+          <Property Name="Kolicina" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="DatumTransakcija" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DetaliNaracka_Naracka">
+          <End Role="Naracka" Type="Self.Naracka" Multiplicity="1" />
+          <End Role="DetaliNaracka" Type="Self.DetaliNaracka" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Naracka">
+              <PropertyRef Name="NarackaId" />
+            </Principal>
+            <Dependent Role="DetaliNaracka">
+              <PropertyRef Name="NarackaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestorantDBModelStoreContainer">
+          <EntitySet Name="Artikl" EntityType="Self.Artikl" Schema="Master" store:Type="Tables" />
+          <EntitySet Name="Klienti" EntityType="Self.Klienti" Schema="Master" store:Type="Tables" />
+          <EntitySet Name="TipNaNaplata" EntityType="Self.TipNaNaplata" Schema="Master" store:Type="Tables" />
+          <EntitySet Name="DetaliNaracka" EntityType="Self.DetaliNaracka" Schema="Naracka" store:Type="Tables" />
+          <EntitySet Name="Naracka" EntityType="Self.Naracka" Schema="Naracka" store:Type="Tables" />
+          <EntitySet Name="Transakcija" EntityType="Self.Transakcija" Schema="Naracka" store:Type="Tables" />
+          <AssociationSet Name="FK_DetaliNaracka_Naracka" Association="Self.FK_DetaliNaracka_Naracka">
+            <End Role="Naracka" EntitySet="Naracka" />
+            <End Role="DetaliNaracka" EntitySet="DetaliNaracka" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestorantDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artikl">
+          <Key>
+            <PropertyRef Name="ArtiklId" />
+          </Key>
+          <Property Name="ArtiklId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArtiklIme" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ArtiklCena" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Klienti">
+          <Key>
+            <PropertyRef Name="KlientId" />
+          </Key>
+          <Property Name="KlientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KlientIme" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipNaNaplata">
+          <Key>
+            <PropertyRef Name="TipNaNaplataId" />
+          </Key>
+          <Property Name="TipNaNaplataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipNaNaplataIme" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="RestorantDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artikls" EntityType="Self.Artikl" />
+          <EntitySet Name="Klientis" EntityType="Self.Klienti" />
+          <EntitySet Name="TipNaNaplatas" EntityType="Self.TipNaNaplata" />
+          <EntitySet Name="Transakcijas" EntityType="RestorantDBModel.Transakcija" />
+          <EntitySet Name="DetaliNarackas" EntityType="RestorantDBModel.DetaliNaracka" />
+          <EntitySet Name="Narackas" EntityType="RestorantDBModel.Naracka" />
+          <AssociationSet Name="FK_DetaliNaracka_Naracka" Association="RestorantDBModel.FK_DetaliNaracka_Naracka">
+            <End Role="Naracka" EntitySet="Narackas" />
+            <End Role="DetaliNaracka" EntitySet="DetaliNarackas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Transakcija">
+          <Key>
+            <PropertyRef Name="TransakcijaId" />
+          </Key>
+          <Property Name="TransakcijaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArtiklId" Type="Int32" Nullable="false" />
+          <Property Name="Kolicina" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="DatumTransakcija" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="DetaliNaracka">
+          <Key>
+            <PropertyRef Name="DetaliNarackaId" />
+          </Key>
+          <Property Name="DetaliNarackaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NarackaId" Type="Int32" Nullable="false" />
+          <Property Name="ArtiklId" Type="Int32" Nullable="false" />
+          <Property Name="Cena" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Kolicina" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="Vkupno" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Naracka" Relationship="RestorantDBModel.FK_DetaliNaracka_Naracka" FromRole="DetaliNaracka" ToRole="Naracka" />
+        </EntityType>
+        <EntityType Name="Naracka">
+          <Key>
+            <PropertyRef Name="NarackaId" />
+          </Key>
+          <Property Name="NarackaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KlientId" Type="Int32" Nullable="false" />
+          <Property Name="TipNaNaplataId" Type="Int32" Nullable="false" />
+          <Property Name="BrojNaracka" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="DatumNaracka" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VkupnoPotroseno" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="DetaliNarackas" Relationship="RestorantDBModel.FK_DetaliNaracka_Naracka" FromRole="Naracka" ToRole="DetaliNaracka" />
+        </EntityType>
+        <Association Name="FK_DetaliNaracka_Naracka">
+          <End Type="RestorantDBModel.Naracka" Role="Naracka" Multiplicity="1" />
+          <End Type="RestorantDBModel.DetaliNaracka" Role="DetaliNaracka" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Naracka">
+              <PropertyRef Name="NarackaId" />
+            </Principal>
+            <Dependent Role="DetaliNaracka">
+              <PropertyRef Name="NarackaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestorantDBModelStoreContainer" CdmEntityContainer="RestorantDBEntities">
+          <EntitySetMapping Name="Artikls">
+            <EntityTypeMapping TypeName="RestorantDBModel.Artikl">
+              <MappingFragment StoreEntitySet="Artikl">
+                <ScalarProperty Name="ArtiklId" ColumnName="ArtiklId" />
+                <ScalarProperty Name="ArtiklIme" ColumnName="ArtiklIme" />
+                <ScalarProperty Name="ArtiklCena" ColumnName="ArtiklCena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Klientis">
+            <EntityTypeMapping TypeName="RestorantDBModel.Klienti">
+              <MappingFragment StoreEntitySet="Klienti">
+                <ScalarProperty Name="KlientId" ColumnName="KlientId" />
+                <ScalarProperty Name="KlientIme" ColumnName="KlientIme" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipNaNaplatas">
+            <EntityTypeMapping TypeName="RestorantDBModel.TipNaNaplata">
+              <MappingFragment StoreEntitySet="TipNaNaplata">
+                <ScalarProperty Name="TipNaNaplataId" ColumnName="TipNaNaplataId" />
+                <ScalarProperty Name="TipNaNaplataIme" ColumnName="TipNaNaplataIme" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transakcijas">
+            <EntityTypeMapping TypeName="RestorantDBModel.Transakcija">
+              <MappingFragment StoreEntitySet="Transakcija">
+                <ScalarProperty Name="DatumTransakcija" ColumnName="DatumTransakcija" />
+                <ScalarProperty Name="Kolicina" ColumnName="Kolicina" />
+                <ScalarProperty Name="ArtiklId" ColumnName="ArtiklId" />
+                <ScalarProperty Name="TransakcijaId" ColumnName="TransakcijaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetaliNarackas">
+            <EntityTypeMapping TypeName="RestorantDBModel.DetaliNaracka">
+              <MappingFragment StoreEntitySet="DetaliNaracka">
+                <ScalarProperty Name="Vkupno" ColumnName="Vkupno" />
+                <ScalarProperty Name="Kolicina" ColumnName="Kolicina" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+                <ScalarProperty Name="ArtiklId" ColumnName="ArtiklId" />
+                <ScalarProperty Name="NarackaId" ColumnName="NarackaId" />
+                <ScalarProperty Name="DetaliNarackaId" ColumnName="DetaliNarackaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Narackas">
+            <EntityTypeMapping TypeName="RestorantDBModel.Naracka">
+              <MappingFragment StoreEntitySet="Naracka">
+                <ScalarProperty Name="VkupnoPotroseno" ColumnName="VkupnoPotroseno" />
+                <ScalarProperty Name="DatumNaracka" ColumnName="DatumNaracka" />
+                <ScalarProperty Name="BrojNaracka" ColumnName="BrojNaracka" />
+                <ScalarProperty Name="TipNaNaplataId" ColumnName="TipNaNaplataId" />
+                <ScalarProperty Name="KlientId" ColumnName="KlientId" />
+                <ScalarProperty Name="NarackaId" ColumnName="NarackaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

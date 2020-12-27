@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="73867f81b6aa43db83469144a009d054" Name="Diagram1">
+        <EntityTypeShape EntityType="RestorantDBModel.Artikl" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestorantDBModel.Klienti" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestorantDBModel.TipNaNaplata" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestorantDBModel.Transakcija" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="RestorantDBModel.DetaliNaracka" Width="1.5" PointX="5.625" PointY="4" />
+        <EntityTypeShape EntityType="RestorantDBModel.Naracka" Width="1.5" PointX="3.375" PointY="4" />
+        <AssociationConnector Association="RestorantDBModel.FK_DetaliNaracka_Naracka" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
